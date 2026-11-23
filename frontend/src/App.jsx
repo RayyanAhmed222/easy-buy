@@ -11,16 +11,16 @@ import Cart from './pages/Cart'
 import Login from './pages/Login'
 import Orders from './pages/Orders'
 import PlaceOrder from './pages/PlaceOrder'
-import Navbar from './components/navbar'
+import Navbar from './components/Navbar'
 import Footer from './components/Footer'
-import SearchBar from './components/searchBar'
-import { ToastContainer, toast } from 'react-toastify';
+import SearchBar from './components/SearchBar'
+import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Profile from './pages/Profile'
 
 const App = () => {
   return (
-    <div className='px-4 sm:px-[5vw] md:px-[7vW] lg::px=[9vw]'>
+    <div className='px-4 sm:px-[5vw] md:px-[7vw] lg:px-[9vw]'>
       <ToastContainer />
       <Navbar />
       <SearchBar />

@@ -15,7 +15,7 @@ import {
 
 import { Link, NavLink } from 'react-router-dom'
 
-import { ShopContext } from '../context/ShopContext'
+import { ShopContext } from '../context/ShopContext.jsx'
 import categoryOptions from '../config/categoryOptions.js'
 
 
