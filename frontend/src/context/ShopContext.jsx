@@ -9,7 +9,8 @@ const ShopContextProvider = (props) => {
 
     const currency = "$";
     const delivery_fee = 10;
-    const backendUrl = import.meta.env.VITE_BACKEND_URL;
+    const rawBackendUrl = import.meta.env.VITE_BACKEND_URL;
+    const backendUrl = rawBackendUrl ? rawBackendUrl.replace(/\/+$/, "") : "";
 
     const [search, setSearch] = useState("");
     const [showSearch, setShowSearch] = useState(false);
@@ -56,7 +57,7 @@ const ShopContextProvider = (props) => {
 
 
         // If user is logged in, save cart to database
-        if (token) {
+        if (token && backendUrl) {
 
             try {
 
@@ -125,7 +126,7 @@ const ShopContextProvider = (props) => {
 
 
         // If user is logged in, update database
-        if (token) {
+        if (token && backendUrl) {
 
             try {
 
@@ -166,6 +167,8 @@ const ShopContextProvider = (props) => {
                 (product) => product._id === items
             );
 
+            if (!itemInfo) continue;
+
             for (const item in cartItems[items]) {
 
                 try {
@@ -194,6 +197,8 @@ const ShopContextProvider = (props) => {
     // GET PRODUCTS
     // =========================
     const getProductsData = async () => {
+
+        if (!backendUrl) return;
 
         try {
 
@@ -224,6 +229,8 @@ const ShopContextProvider = (props) => {
     // GET USER CART FROM DATABASE
     // =========================
     const getUserCart = async (userToken) => {
+
+        if (!backendUrl) return;
 
         try {
 
