@@ -74,12 +74,12 @@ const Contact = () => {
 
                     <div className="relative">
 
-                        <div className="overflow-hidden rounded-[2rem] bg-gray-100">
+                        <div className="overflow-hidden rounded-4xl bg-gray-100">
 
                             <img
                                 src={assets.contact_img}
                                 alt="EASYBUY customer support"
-                                className="w-full h-[420px] sm:h-[520px] lg:h-[600px] object-cover hover:scale-[1.03] transition-transform duration-700"
+                                className="w-full h-105 sm:h-130 lg:h-150 object-cover hover:scale-[1.03] transition-transform duration-700"
                             />
 
                         </div>
@@ -162,7 +162,7 @@ const Contact = () => {
 
                             <div className="group flex items-start gap-4 border border-gray-200 rounded-2xl p-5 hover:border-gray-300 hover:shadow-sm transition-all">
 
-                                <div className="w-11 h-11 rounded-xl bg-[#f6f6f3] flex items-center justify-center flex-shrink-0">
+                                <div className="w-11 h-11 rounded-xl bg-[#f6f6f3] flex items-center justify-center shrink-0">
 
                                     <MapPin
                                         size={19}
@@ -193,7 +193,7 @@ const Contact = () => {
 
                             <div className="group flex items-start gap-4 border border-gray-200 rounded-2xl p-5 hover:border-gray-300 hover:shadow-sm transition-all">
 
-                                <div className="w-11 h-11 rounded-xl bg-[#f6f6f3] flex items-center justify-center flex-shrink-0">
+                                <div className="w-11 h-11 rounded-xl bg-[#f6f6f3] flex items-center justify-center shrink-0">
 
                                     <Phone
                                         size={19}
@@ -222,7 +222,7 @@ const Contact = () => {
 
                             <div className="group flex items-start gap-4 border border-gray-200 rounded-2xl p-5 hover:border-gray-300 hover:shadow-sm transition-all">
 
-                                <div className="w-11 h-11 rounded-xl bg-[#f6f6f3] flex items-center justify-center flex-shrink-0">
+                                <div className="w-11 h-11 rounded-xl bg-[#f6f6f3] flex items-center justify-center shrink-0">
 
                                     <Mail
                                         size={19}
@@ -251,7 +251,7 @@ const Contact = () => {
 
                             <div className="group flex items-start gap-4 border border-gray-200 rounded-2xl p-5 hover:border-gray-300 hover:shadow-sm transition-all">
 
-                                <div className="w-11 h-11 rounded-xl bg-[#f6f6f3] flex items-center justify-center flex-shrink-0">
+                                <div className="w-11 h-11 rounded-xl bg-[#f6f6f3] flex items-center justify-center shrink-0">
 
                                     <Clock
                                         size={19}
@@ -294,7 +294,7 @@ const Contact = () => {
 
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
-                    <div className="bg-black text-white rounded-[2rem] overflow-hidden">
+                    <div className="bg-black text-white rounded-4xl overflow-hidden">
 
                         <div className="grid md:grid-cols-2">
 
@@ -349,7 +349,7 @@ const Contact = () => {
 
                                 <div className="flex items-start gap-4">
 
-                                    <div className="w-12 h-12 rounded-2xl bg-white/10 flex items-center justify-center flex-shrink-0">
+                                    <div className="w-12 h-12 rounded-2xl bg-white/10 flex items-center justify-center shrink-0">
 
                                         <Headphones
                                             size={21}

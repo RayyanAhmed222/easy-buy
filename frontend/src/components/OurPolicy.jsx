@@ -42,13 +42,13 @@ const OurPolicy = () => {
 
                 <div className="mb-4 flex items-center justify-center gap-3">
 
-                    <span className="h-[1px] w-8 bg-black" />
+                    <span className="h-px w-8 bg-black" />
 
                     <p className="text-[10px] font-semibold uppercase tracking-[0.25em] text-gray-400">
                         EASYBUY / WHY SHOP WITH US
                     </p>
 
-                    <span className="h-[1px] w-8 bg-black" />
+                    <span className="h-px w-8 bg-black" />
 
                 </div>
 

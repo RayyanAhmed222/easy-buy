@@ -8,7 +8,7 @@ const Hero = () => {
 
         <section className="relative overflow-hidden bg-[#f7f7f5]">
 
-            <div className="grid min-h-[620px] grid-cols-1 lg:grid-cols-2">
+            <div className="grid min-h-155 grid-cols-1 lg:grid-cols-2">
 
                 {/* ================================================= */}
                 {/* ================= LEFT CONTENT ================== */}
@@ -18,7 +18,7 @@ const Hero = () => {
 
                     {/* Decorative Background Text */}
 
-                    <span className="pointer-events-none absolute -left-5 bottom-[-35px] select-none text-[120px] font-semibold tracking-[-8px] text-black/[0.025] sm:text-[180px]">
+                    <span className="pointer-events-none absolute -left-5 -bottom-8.75 select-none text-[120px] font-semibold tracking-[-8px] text-black/2.5 sm:text-[180px]">
                         EB
                     </span>
 
@@ -29,7 +29,7 @@ const Hero = () => {
 
                         <div className="mb-7 flex items-center gap-3">
 
-                            <span className="h-[1px] w-10 bg-black sm:w-14" />
+                            <span className="h-px w-10 bg-black sm:w-14" />
 
                             <p className="text-[10px] font-semibold uppercase tracking-[0.28em] text-gray-500 sm:text-xs">
                                 EASYBUY / NEW SEASON
@@ -92,7 +92,7 @@ const Hero = () => {
                                     Explore Women
                                 </span>
 
-                                <span className="h-[1px] w-7 bg-black transition-all duration-300 group-hover:w-11" />
+                                <span className="h-px w-7 bg-black transition-all duration-300 group-hover:w-11" />
 
                             </Link>
 
@@ -141,7 +141,7 @@ const Hero = () => {
                 {/* ================= RIGHT IMAGE =================== */}
                 {/* ================================================= */}
 
-                <div className="group relative min-h-[480px] overflow-hidden lg:min-h-full">
+                <div className="group relative min-h-120 overflow-hidden lg:min-h-full">
 
                     {/* Main Image */}
 
@@ -154,7 +154,7 @@ const Hero = () => {
 
                     {/* Image Overlay */}
 
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-black/5" />
+                    <div className="absolute inset-0 bg-linear-to-t from-black/35 via-transparent to-black/5" />
 
 
                     {/* Top Badge */}

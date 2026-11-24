@@ -121,12 +121,12 @@ const About = () => {
 
                     <div className="relative">
 
-                        <div className="overflow-hidden rounded-[2rem] bg-gray-100">
+                        <div className="overflow-hidden rounded-4xl bg-gray-100">
 
                             <img
                                 src={assets.about_img}
                                 alt="EASYBUY collection"
-                                className="w-full h-[420px] sm:h-[520px] lg:h-[600px] object-cover hover:scale-[1.03] transition-transform duration-700"
+                                className="w-full h-105 sm:h-130 lg:h-150 object-cover hover:scale-[1.03] transition-transform duration-700"
                             />
 
                         </div>
@@ -403,7 +403,7 @@ const About = () => {
 
             <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
 
-                <div className="rounded-[2rem] bg-black text-white overflow-hidden">
+                <div className="rounded-4xl bg-black text-white overflow-hidden">
 
                     <div className="grid lg:grid-cols-2">
 
@@ -463,7 +463,7 @@ const About = () => {
                                     <ShieldCheck
                                         size={22}
                                         strokeWidth={1.5}
-                                        className="text-gray-300 mt-1 flex-shrink-0"
+                                        className="text-gray-300 mt-1 shrink-0"
                                     />
 
                                     <div>
@@ -486,7 +486,7 @@ const About = () => {
                                     <Truck
                                         size={22}
                                         strokeWidth={1.5}
-                                        className="text-gray-300 mt-1 flex-shrink-0"
+                                        className="text-gray-300 mt-1 shrink-0"
                                     />
 
                                     <div>
@@ -510,7 +510,7 @@ const About = () => {
                                     <Heart
                                         size={22}
                                         strokeWidth={1.5}
-                                        className="text-gray-300 mt-1 flex-shrink-0"
+                                        className="text-gray-300 mt-1 shrink-0"
                                     />
 
                                     <div>

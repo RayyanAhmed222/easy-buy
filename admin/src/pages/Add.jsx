@@ -1110,7 +1110,7 @@ const Add = ({ token }) => {
                                             Product
                                         </span>
 
-                                        <span className="max-w-[170px] truncate text-right text-xs font-medium text-neutral-900">
+                                        <span className="max-w-42.5 truncate text-right text-xs font-medium text-neutral-900">
                                             {name || 'Not added'}
                                         </span>
 
@@ -1139,7 +1139,7 @@ const Add = ({ token }) => {
                                             Type
                                         </span>
 
-                                        <span className="max-w-[170px] truncate text-right text-xs font-medium text-neutral-900">
+                                        <span className="max-w-42.5 truncate text-right text-xs font-medium text-neutral-900">
                                             {subSubCategory || 'Not selected'}
                                         </span>
 

@@ -495,7 +495,7 @@ const Dashboard = ({ token }) => {
                         {currency}{Number(b.amount).toLocaleString('en-US')} ({b.count})
                       </div>
                       <div
-                        className={`w-full max-w-[32px] rounded-t-lg transition-all duration-300 ${isZero ? 'h-1.5 bg-neutral-200' : 'bg-black group-hover:bg-neutral-700'}`}
+                        className={`w-full max-w-8 rounded-t-lg transition-all duration-300 ${isZero ? 'h-1.5 bg-neutral-200' : 'bg-black group-hover:bg-neutral-700'}`}
                         style={!isZero ? { height: `${Math.max(b.heightPercent, 10)}%` } : undefined}
                         title={`${b.label} (${b.sub}): ${currency}${formatMoney(b.amount)} (${b.count} orders)`}
                       />

@@ -38,7 +38,7 @@ const BestSeller = () => {
 
                     <div className="mb-4 flex items-center gap-3">
 
-                        <span className="h-[1px] w-8 bg-black sm:w-10" />
+                        <span className="h-px w-8 bg-black sm:w-10" />
 
                         <div className="flex items-center gap-2">
 
