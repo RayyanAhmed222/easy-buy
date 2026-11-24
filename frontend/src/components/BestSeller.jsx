@@ -17,7 +17,7 @@ const BestSeller = () => {
             (item) => item.bestSeller
         )
 
-        setBestSeller(bestProduct.slice(0, 5))
+        setBestSeller(bestProduct.slice(0, 10))
 
     }, [products])
 
