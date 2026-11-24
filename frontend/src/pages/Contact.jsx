@@ -10,490 +10,232 @@ import {
     Headphones,
 } from 'lucide-react'
 import { FaInstagram } from 'react-icons/fa'
+import contactImg from '../assets/contact_img.png' // apni file ka exact naam/extension check karein
 import NewsLetterBox from '../components/NewsLetterBox'
 
-const Contact = () => {
+const contactInfo = [
+    {
+        icon: MapPin,
+        title: 'Our Store',
+        lines: ['EASYBUY Store', 'Karachi, Pakistan'],
+    },
+    {
+        icon: Phone,
+        title: 'Phone',
+        lines: ['+92 300 0000000'],
+    },
+    {
+        icon: Mail,
+        title: 'Email',
+        lines: ['support@easybuy.com'],
+    },
+    {
+        icon: Clock,
+        title: 'Support Hours',
+        lines: ['Monday – Saturday', '10:00 AM – 8:00 PM'],
+    },
+]
 
+const quickLinks = [
+    { label: 'Explore', title: 'Shop Collection', to: '/' },
+    { label: 'Discover', title: 'About EASYBUY', to: '/about' },
+    { label: 'Account', title: 'Track Orders', to: '/orders' },
+]
+
+const Contact = () => {
     return (
         <div className="border-t border-gray-100">
-
-            {/* =====================================================
-                HERO
-            ===================================================== */}
-
+            {/* Hero */}
             <section className="bg-[#f6f6f3]">
-
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20 lg:py-24">
-
+                <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 sm:py-20 lg:px-8 lg:py-24">
                     <div className="max-w-3xl">
-
-                        <div className="flex items-center gap-2 mb-5">
-
-                            <span className="w-8 h-px bg-gray-800"></span>
-
-                            <p className="text-[10px] sm:text-xs font-semibold tracking-[0.28em] uppercase text-gray-500">
+                        <div className="mb-5 flex items-center gap-2">
+                            <span className="h-px w-8 bg-gray-800" />
+                            <p className="text-[10px] font-semibold uppercase tracking-[0.28em] text-gray-500 sm:text-xs">
                                 EASYBUY / CONTACT
                             </p>
-
                         </div>
 
-                        <h1 className="text-4xl sm:text-5xl lg:text-7xl font-light tracking-tight text-gray-900 leading-[1.05]">
-
+                        <h1 className="text-4xl font-light leading-[1.05] tracking-tight text-gray-900 sm:text-5xl lg:text-7xl">
                             Let's start a
-
                             <br />
-
-                            <span className="font-serif italic">
-                                conversation.
-                            </span>
-
+                            <span className="font-serif italic">conversation.</span>
                         </h1>
 
-                        <p className="mt-6 max-w-2xl text-sm sm:text-base text-gray-500 leading-7">
-                            Have a question about an order, product or anything
-                            else? Our team is here to help make your EASYBUY
-                            experience as smooth as possible.
+                        <p className="mt-6 max-w-2xl text-sm leading-7 text-gray-500 sm:text-base">
+                            Have a question about an order, product or anything else? Our team is
+                            here to help make your EASYBUY experience as smooth as possible.
                         </p>
-
                     </div>
-
                 </div>
-
             </section>
 
-
-            {/* =====================================================
-                CONTACT CONTENT
-            ===================================================== */}
-
-            <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24 lg:py-28">
-
-                <div className="grid lg:grid-cols-2 gap-10 lg:gap-20 items-center">
-
-                    {/* Image */}
-
+            {/* Contact Content */}
+            <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 sm:py-24 lg:px-8 lg:py-28">
+                <div className="grid items-center gap-10 lg:grid-cols-2 lg:gap-20">
                     <div className="relative">
-
-                        <div className="overflow-hidden rounded-4xl bg-gray-100">
-
+                        <div className="overflow-hidden rounded-3xl bg-gray-100">
                             <img
-                                src={assets.contact_img}
+                                src={contactImg}
                                 alt="EASYBUY customer support"
-                                className="w-full h-105 sm:h-130 lg:h-150 object-cover hover:scale-[1.03] transition-transform duration-700"
+                                className="h-96 w-full object-cover transition-transform duration-700 hover:scale-[1.03] sm:h-[480px] lg:h-[560px]"
                             />
-
                         </div>
 
-
-                        {/* Floating Support Badge */}
-
-                        <div className="absolute -bottom-5 right-5 sm:right-8 bg-white border border-gray-100 shadow-xl rounded-2xl px-5 py-4">
-
+                        <div className="absolute -bottom-5 right-5 rounded-2xl border border-gray-100 bg-white px-5 py-4 shadow-xl sm:right-8">
                             <div className="flex items-center gap-3">
-
-                                <div className="w-10 h-10 rounded-full bg-[#f6f6f3] flex items-center justify-center">
-
-                                    <Headphones
-                                        size={18}
-                                        strokeWidth={1.7}
-                                        className="text-gray-700"
-                                    />
-
+                                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#f6f6f3]">
+                                    <Headphones size={18} strokeWidth={1.7} className="text-gray-700" />
                                 </div>
-
                                 <div>
-
                                     <p className="text-[10px] uppercase tracking-wider text-gray-400">
                                         EASYBUY SUPPORT
                                     </p>
-
                                     <p className="text-sm font-semibold text-gray-900">
                                         We're here to help
                                     </p>
-
                                 </div>
-
                             </div>
-
                         </div>
-
                     </div>
-
-
-                    {/* Contact Details */}
 
                     <div>
-
-                        <div className="flex items-center gap-2 mb-5">
-
-                            <span className="w-7 h-px bg-gray-800"></span>
-
-                            <p className="text-[10px] sm:text-xs font-semibold tracking-[0.25em] uppercase text-gray-500">
+                        <div className="mb-5 flex items-center gap-2">
+                            <span className="h-px w-7 bg-gray-800" />
+                            <p className="text-[10px] font-semibold uppercase tracking-[0.25em] text-gray-500 sm:text-xs">
                                 GET IN TOUCH
                             </p>
-
                         </div>
 
-                        <h2 className="text-3xl sm:text-4xl lg:text-5xl font-light tracking-tight text-gray-900 leading-tight">
-
+                        <h2 className="text-3xl font-light leading-tight tracking-tight text-gray-900 sm:text-4xl lg:text-5xl">
                             We're always
-
                             <br />
-
-                            <span className="font-serif italic">
-                                happy to help.
-                            </span>
-
+                            <span className="font-serif italic">happy to help.</span>
                         </h2>
 
-
-                        <p className="mt-5 text-sm sm:text-base text-gray-500 leading-7 max-w-lg">
-                            Whether you need help with an order, want to know
-                            more about a product, or simply have a question,
-                            feel free to reach out.
+                        <p className="mt-5 max-w-lg text-sm leading-7 text-gray-500 sm:text-base">
+                            Whether you need help with an order, want to know more about a product,
+                            or simply have a question, feel free to reach out.
                         </p>
 
-
-                        {/* Contact Cards */}
-
                         <div className="mt-8 space-y-3">
-
-                            {/* Store */}
-
-                            <div className="group flex items-start gap-4 border border-gray-200 rounded-2xl p-5 hover:border-gray-300 hover:shadow-sm transition-all">
-
-                                <div className="w-11 h-11 rounded-xl bg-[#f6f6f3] flex items-center justify-center shrink-0">
-
-                                    <MapPin
-                                        size={19}
-                                        strokeWidth={1.6}
-                                        className="text-gray-700"
-                                    />
-
-                                </div>
-
-                                <div>
-
-                                    <p className="text-sm font-semibold text-gray-900">
-                                        Our Store
-                                    </p>
-
-                                    <p className="text-sm text-gray-500 mt-1 leading-6">
-                                        EASYBUY Store
-                                        <br />
-                                        Karachi, Pakistan
-                                    </p>
-
-                                </div>
-
-                            </div>
-
-
-                            {/* Phone */}
-
-                            <div className="group flex items-start gap-4 border border-gray-200 rounded-2xl p-5 hover:border-gray-300 hover:shadow-sm transition-all">
-
-                                <div className="w-11 h-11 rounded-xl bg-[#f6f6f3] flex items-center justify-center shrink-0">
-
-                                    <Phone
-                                        size={19}
-                                        strokeWidth={1.6}
-                                        className="text-gray-700"
-                                    />
-
-                                </div>
-
-                                <div>
-
-                                    <p className="text-sm font-semibold text-gray-900">
-                                        Phone
-                                    </p>
-
-                                    <p className="text-sm text-gray-500 mt-1">
-                                        +92 300 0000000
-                                    </p>
-
-                                </div>
-
-                            </div>
-
-
-                            {/* Email */}
-
-                            <div className="group flex items-start gap-4 border border-gray-200 rounded-2xl p-5 hover:border-gray-300 hover:shadow-sm transition-all">
-
-                                <div className="w-11 h-11 rounded-xl bg-[#f6f6f3] flex items-center justify-center shrink-0">
-
-                                    <Mail
-                                        size={19}
-                                        strokeWidth={1.6}
-                                        className="text-gray-700"
-                                    />
-
-                                </div>
-
-                                <div>
-
-                                    <p className="text-sm font-semibold text-gray-900">
-                                        Email
-                                    </p>
-
-                                    <p className="text-sm text-gray-500 mt-1">
-                                        support@easybuy.com
-                                    </p>
-
-                                </div>
-
-                            </div>
-
-
-                            {/* Hours */}
-
-                            <div className="group flex items-start gap-4 border border-gray-200 rounded-2xl p-5 hover:border-gray-300 hover:shadow-sm transition-all">
-
-                                <div className="w-11 h-11 rounded-xl bg-[#f6f6f3] flex items-center justify-center shrink-0">
-
-                                    <Clock
-                                        size={19}
-                                        strokeWidth={1.6}
-                                        className="text-gray-700"
-                                    />
-
-                                </div>
-
-                                <div>
-
-                                    <p className="text-sm font-semibold text-gray-900">
-                                        Support Hours
-                                    </p>
-
-                                    <p className="text-sm text-gray-500 mt-1">
-                                        Monday – Saturday
-                                        <br />
-                                        10:00 AM – 8:00 PM
-                                    </p>
-
-                                </div>
-
-                            </div>
-
+                            {contactInfo.map((item) => {
+                                const Icon = item.icon
+                                return (
+                                    <div
+                                        key={item.title}
+                                        className="group flex items-start gap-4 rounded-2xl border border-gray-200 p-5 transition-all hover:border-gray-300 hover:shadow-sm"
+                                    >
+                                        <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[#f6f6f3]">
+                                            <Icon size={19} strokeWidth={1.6} className="text-gray-700" />
+                                        </div>
+                                        <div>
+                                            <p className="text-sm font-semibold text-gray-900">
+                                                {item.title}
+                                            </p>
+                                            <p className="mt-1 text-sm leading-6 text-gray-500">
+                                                {item.lines.map((line, idx) => (
+                                                    <React.Fragment key={line}>
+                                                        {idx > 0 && <br />}
+                                                        {line}
+                                                    </React.Fragment>
+                                                ))}
+                                            </p>
+                                        </div>
+                                    </div>
+                                )
+                            })}
                         </div>
-
                     </div>
-
                 </div>
-
             </section>
 
-
-            {/* =====================================================
-                SUPPORT CTA
-            ===================================================== */}
-
+            {/* Support CTA */}
             <section className="bg-[#f6f6f3] py-16 sm:py-20">
-
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-
-                    <div className="bg-black text-white rounded-4xl overflow-hidden">
-
+                <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+                    <div className="overflow-hidden rounded-3xl bg-black text-white">
                         <div className="grid md:grid-cols-2">
-
                             <div className="p-8 sm:p-12 lg:p-14">
-
-                                <div className="flex items-center gap-2 mb-5">
-
-                                    <MessageCircle
-                                        size={15}
-                                        strokeWidth={1.7}
-                                    />
-
-                                    <p className="text-[10px] sm:text-xs font-semibold tracking-[0.25em] uppercase text-gray-400">
+                                <div className="mb-5 flex items-center gap-2">
+                                    <MessageCircle size={15} strokeWidth={1.7} />
+                                    <p className="text-[10px] font-semibold uppercase tracking-[0.25em] text-gray-400 sm:text-xs">
                                         CUSTOMER CARE
                                     </p>
-
                                 </div>
 
-                                <h2 className="text-3xl sm:text-4xl font-light leading-tight">
-
+                                <h2 className="text-3xl font-light leading-tight sm:text-4xl">
                                     Need help with
-
                                     <br />
-
-                                    <span className="font-serif italic">
-                                        your order?
-                                    </span>
-
+                                    <span className="font-serif italic">your order?</span>
                                 </h2>
 
-                                <p className="mt-5 text-sm text-gray-400 leading-6 max-w-md">
-                                    Our support team can help you with order
-                                    questions, product information and general
-                                    assistance.
+                                <p className="mt-5 max-w-md text-sm leading-6 text-gray-400">
+                                    Our support team can help you with order questions, product
+                                    information and general assistance.
                                 </p>
 
                                 <Link
                                     to="/orders"
-                                    className="inline-flex items-center gap-2 mt-7 bg-white text-black px-6 py-3.5 rounded-full text-sm font-medium hover:bg-gray-200 transition-all"
+                                    className="mt-7 inline-flex items-center gap-2 rounded-full bg-white px-6 py-3.5 text-sm font-medium text-black transition-all hover:bg-gray-200"
                                 >
-
                                     View My Orders
-
                                     <ArrowRight size={16} />
-
                                 </Link>
-
                             </div>
 
-
-                            <div className="bg-[#171717] p-8 sm:p-12 lg:p-14 flex flex-col justify-center">
-
+                            <div className="flex flex-col justify-center bg-[#171717] p-8 sm:p-12 lg:p-14">
                                 <div className="flex items-start gap-4">
-
-                                    <div className="w-12 h-12 rounded-2xl bg-white/10 flex items-center justify-center shrink-0">
-
-                                        <Headphones
-                                            size={21}
-                                            strokeWidth={1.5}
-                                        />
-
+                                    <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-white/10">
+                                        <Headphones size={21} strokeWidth={1.5} />
                                     </div>
-
                                     <div>
-
-                                        <p className="text-lg font-medium">
-                                            We're here for you
+                                        <p className="text-lg font-medium">We're here for you</p>
+                                        <p className="mt-2 text-sm leading-6 text-gray-500">
+                                            Reach out whenever you need assistance and we'll do our
+                                            best to make your experience easier.
                                         </p>
-
-                                        <p className="text-sm text-gray-500 mt-2 leading-6">
-                                            Reach out whenever you need
-                                            assistance and we'll do our best
-                                            to make your experience easier.
-                                        </p>
-
                                     </div>
-
                                 </div>
 
-
-                                <div className="mt-8 pt-6 border-t border-white/10">
-
+                                <div className="mt-8 border-t border-white/10 pt-6">
                                     <div className="flex items-center gap-3 text-gray-400">
-
                                         <FaInstagram size={17} />
-
                                         <span className="text-sm">
-                                            Follow EASYBUY for new arrivals
-                                            and updates
+                                            Follow EASYBUY for new arrivals and updates
                                         </span>
-
                                     </div>
-
                                 </div>
-
                             </div>
-
                         </div>
-
                     </div>
-
                 </div>
-
             </section>
 
-
-            {/* =====================================================
-                QUICK LINKS
-            ===================================================== */}
-
-            <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-
-                    <Link
-                        to="/"
-                        className="group border border-gray-200 rounded-2xl p-6 hover:border-black transition-all"
-                    >
-
-                        <p className="text-xs uppercase tracking-wider text-gray-400">
-                            Explore
-                        </p>
-
-                        <div className="flex items-center justify-between mt-3">
-
-                            <p className="font-medium text-gray-900">
-                                Shop Collection
+            {/* Quick Links */}
+            <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+                    {quickLinks.map((item) => (
+                        <Link
+                            key={item.title}
+                            to={item.to}
+                            className="group rounded-2xl border border-gray-200 p-6 transition-all hover:border-black"
+                        >
+                            <p className="text-xs uppercase tracking-wider text-gray-400">
+                                {item.label}
                             </p>
-
-                            <ArrowRight
-                                size={17}
-                                className="group-hover:translate-x-1 transition-transform"
-                            />
-
-                        </div>
-
-                    </Link>
-
-
-                    <Link
-                        to="/about"
-                        className="group border border-gray-200 rounded-2xl p-6 hover:border-black transition-all"
-                    >
-
-                        <p className="text-xs uppercase tracking-wider text-gray-400">
-                            Discover
-                        </p>
-
-                        <div className="flex items-center justify-between mt-3">
-
-                            <p className="font-medium text-gray-900">
-                                About EASYBUY
-                            </p>
-
-                            <ArrowRight
-                                size={17}
-                                className="group-hover:translate-x-1 transition-transform"
-                            />
-
-                        </div>
-
-                    </Link>
-
-
-                    <Link
-                        to="/orders"
-                        className="group border border-gray-200 rounded-2xl p-6 hover:border-black transition-all"
-                    >
-
-                        <p className="text-xs uppercase tracking-wider text-gray-400">
-                            Account
-                        </p>
-
-                        <div className="flex items-center justify-between mt-3">
-
-                            <p className="font-medium text-gray-900">
-                                Track Orders
-                            </p>
-
-                            <ArrowRight
-                                size={17}
-                                className="group-hover:translate-x-1 transition-transform"
-                            />
-
-                        </div>
-
-                    </Link>
-
+                            <div className="mt-3 flex items-center justify-between">
+                                <p className="font-medium text-gray-900">{item.title}</p>
+                                <ArrowRight
+                                    size={17}
+                                    className="transition-transform group-hover:translate-x-1"
+                                />
+                            </div>
+                        </Link>
+                    ))}
                 </div>
-
             </section>
-
-
-            {/* =====================================================
-                NEWSLETTER
-            ===================================================== */}
 
             <NewsLetterBox />
-
         </div>
     )
 }
