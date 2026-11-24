@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react'
 import axios from 'axios'
 import { toast } from 'react-toastify'
 import { useNavigate } from 'react-router-dom'
-import { LayoutDashboard, RefreshCw, DollarSign, ShoppingBag, Package, Star, Plus, ArrowUpRight, Clock3, Truck, CheckCircle2, Layers3, CreditCard, TrendingUp, Calendar, Search, AlertCircle } from 'lucide-react'
+import { LayoutDashboard, RefreshCw, DollarSign, ShoppingBag, Package, Star, Plus, ArrowUpRight, Clock3, Truck, CheckCircle2, Layers3, CreditCard, TrendingUp, Calendar, Search, AlertCircle, BarChart3 } from 'lucide-react'
 import { backendUrl, currency } from '../App'
 
 const Dashboard = ({ token }) => {
@@ -11,6 +11,8 @@ const Dashboard = ({ token }) => {
   const [loading, setLoading] = useState(true)
   const [refreshing, setRefreshing] = useState(false)
   const [range, setRange] = useState('all')
+  const [granularity, setGranularity] = useState('month')
+  const [chartMode, setChartMode] = useState('gross')
   const [quickQuery, setQuickQuery] = useState('')
   const [now, setNow] = useState(() => new Date())
 
@@ -71,6 +73,124 @@ const Dashboard = ({ token }) => {
     const days = range === '7d' ? 7 : 30
     return orders.filter((o) => Number(o.date || 0) >= currentMs - days * dayMs)
   }, [orders, range])
+
+  const salesChartData = useMemo(() => {
+    const validOrders = orders.filter((o) => {
+      if (chartMode === 'paid' && !o.payment) return false
+      const d = new Date(Number(o.date) || o.date)
+      return !Number.isNaN(d.getTime())
+    })
+
+    let buckets = []
+
+    if (granularity === 'day') {
+      const dayMs = 24 * 60 * 60 * 1000
+      const todayStart = new Date()
+      todayStart.setHours(0, 0, 0, 0)
+
+      buckets = Array.from({ length: 7 }, (_, i) => {
+        const offset = i - 6
+        const start = new Date(todayStart.getTime() + offset * dayMs)
+        const end = new Date(start.getTime() + dayMs)
+        return {
+          key: start.toISOString().slice(0, 10),
+          label: start.toLocaleDateString('en-US', { weekday: 'short' }),
+          sub: start.toLocaleDateString('en-US', { day: '2-digit', month: 'short' }),
+          startMs: start.getTime(),
+          endMs: end.getTime(),
+          amount: 0,
+          count: 0
+        }
+      })
+
+      validOrders.forEach((o) => {
+        const ts = new Date(Number(o.date) || o.date).getTime()
+        const target = buckets.find((b) => ts >= b.startMs && ts < b.endMs)
+        if (target) {
+          target.amount += Number(o.amount || 0)
+          target.count += 1
+        }
+      })
+    } else if (granularity === 'week') {
+      const dayMs = 24 * 60 * 60 * 1000
+      const weekMs = 7 * dayMs
+      const todayStart = new Date()
+      todayStart.setHours(0, 0, 0, 0)
+      const dayOfWeek = todayStart.getDay()
+      const currentWeekStart = new Date(todayStart.getTime() - dayOfWeek * dayMs)
+
+      buckets = Array.from({ length: 6 }, (_, i) => {
+        const offset = i - 5
+        const start = new Date(currentWeekStart.getTime() + offset * weekMs)
+        const end = new Date(start.getTime() + weekMs)
+        return {
+          key: `w-${i}`,
+          label: offset === 0 ? 'This Wk' : `W${offset}`,
+          sub: start.toLocaleDateString('en-US', { day: '2-digit', month: 'short' }),
+          startMs: start.getTime(),
+          endMs: end.getTime(),
+          amount: 0,
+          count: 0
+        }
+      })
+
+      validOrders.forEach((o) => {
+        const ts = new Date(Number(o.date) || o.date).getTime()
+        const target = buckets.find((b) => ts >= b.startMs && ts < b.endMs)
+        if (target) {
+          target.amount += Number(o.amount || 0)
+          target.count += 1
+        }
+      })
+    } else if (granularity === 'year') {
+      const currentYear = new Date().getFullYear()
+      buckets = Array.from({ length: 5 }, (_, i) => {
+        const yr = currentYear - 4 + i
+        return {
+          key: String(yr),
+          label: String(yr),
+          sub: 'Year',
+          year: yr,
+          amount: 0,
+          count: 0
+        }
+      })
+
+      validOrders.forEach((o) => {
+        const d = new Date(Number(o.date) || o.date)
+        const target = buckets.find((b) => b.year === d.getFullYear())
+        if (target) {
+          target.amount += Number(o.amount || 0)
+          target.count += 1
+        }
+      })
+    } else {
+      const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+      buckets = months.map((label, idx) => ({
+        key: label,
+        label,
+        sub: 'Month',
+        monthIndex: idx,
+        amount: 0,
+        count: 0
+      }))
+
+      validOrders.forEach((o) => {
+        const d = new Date(Number(o.date) || o.date)
+        const m = d.getMonth()
+        if (buckets[m]) {
+          buckets[m].amount += Number(o.amount || 0)
+          buckets[m].count += 1
+        }
+      })
+    }
+
+    const maxAmount = Math.max(...buckets.map((item) => item.amount), 0)
+    return buckets.map((item) => ({
+      ...item,
+      heightPercent: maxAmount > 0 ? Math.round((item.amount / maxAmount) * 100) : 0
+    }))
+  }, [orders, granularity, chartMode])
 
   const stats = useMemo(() => {
     const totalProducts = products.length
@@ -179,6 +299,22 @@ const Dashboard = ({ token }) => {
 
   const liveDateLabel = now.toLocaleDateString('en-US', { weekday: 'short', day: '2-digit', month: 'short', year: 'numeric' })
   const liveTimeLabel = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit' })
+
+  const granularityTitles = {
+    day: 'Daily Sales (Last 7 Days)',
+    week: 'Weekly Sales (Last 6 Weeks)',
+    month: 'Monthly Sales (Jan – Dec)',
+    year: 'Yearly Sales (Last 5 Years)'
+  }
+
+  const gridColsClass =
+    granularity === 'month'
+      ? 'grid-cols-6 sm:grid-cols-12'
+      : granularity === 'day'
+        ? 'grid-cols-4 sm:grid-cols-7'
+        : granularity === 'week'
+          ? 'grid-cols-3 sm:grid-cols-6'
+          : 'grid-cols-3 sm:grid-cols-5'
 
   return (
     <div className="min-h-screen bg-[#f7f7f5] px-4 py-5 sm:px-6 lg:px-8">
@@ -301,6 +437,77 @@ const Dashboard = ({ token }) => {
               </div>
               <p className="mt-3 text-2xl font-semibold tracking-tight text-neutral-950">{stats.bestSellers}</p>
               <p className="mt-2 text-xs text-neutral-500">Featured in Top Picks storefront</p>
+            </div>
+          </div>
+
+          {/* CUSTOMIZABLE SALES GRAPH (DAY / WEEK / MONTH / YEAR) */}
+          <div className="mb-6 rounded-2xl border border-neutral-200 bg-white p-5 shadow-sm">
+            <div className="mb-5 flex flex-col justify-between gap-3 lg:flex-row lg:items-center">
+              <div className="flex items-center gap-2.5">
+                <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-neutral-100 text-neutral-900">
+                  <BarChart3 size={17} />
+                </div>
+                <div>
+                  <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-neutral-400">Sales Graph</p>
+                  <h2 className="text-base font-semibold text-neutral-950">
+                    {granularityTitles[granularity]} · <span className="text-xs font-normal text-neutral-500">{chartMode === 'gross' ? 'All Orders' : 'Paid Only'}</span>
+                  </h2>
+                </div>
+              </div>
+
+              <div className="flex flex-wrap items-center gap-2">
+                <div className="flex items-center rounded-xl border border-neutral-200 bg-neutral-50 p-1">
+                  {[
+                    { id: 'day', label: 'Day' },
+                    { id: 'week', label: 'Week' },
+                    { id: 'month', label: 'Month' },
+                    { id: 'year', label: 'Year' }
+                  ].map((item) => (
+                    <button
+                      key={item.id}
+                      type="button"
+                      onClick={() => setGranularity(item.id)}
+                      className={`rounded-lg px-2.5 py-1 text-xs font-semibold transition ${granularity === item.id ? 'bg-black text-white' : 'text-neutral-600 hover:text-black'}`}
+                    >
+                      {item.label}
+                    </button>
+                  ))}
+                </div>
+
+                <div className="flex items-center rounded-xl border border-neutral-200 bg-neutral-50 p-1">
+                  <button type="button" onClick={() => setChartMode('gross')} className={`rounded-lg px-2.5 py-1 text-xs font-semibold transition ${chartMode === 'gross' ? 'bg-black text-white' : 'text-neutral-600 hover:text-black'}`}>
+                    All
+                  </button>
+                  <button type="button" onClick={() => setChartMode('paid')} className={`rounded-lg px-2.5 py-1 text-xs font-semibold transition ${chartMode === 'paid' ? 'bg-black text-white' : 'text-neutral-600 hover:text-black'}`}>
+                    Paid
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div className={`grid gap-2.5 pt-4 sm:gap-3 ${gridColsClass}`}>
+              {salesChartData.map((b) => {
+                const isZero = b.amount <= 0
+                return (
+                  <div key={b.key} className="group flex flex-col items-center">
+                    <div className="relative flex h-36 w-full items-end justify-center rounded-xl bg-neutral-50/90 px-1 pt-2">
+                      <div className="pointer-events-none absolute -top-7 z-10 hidden whitespace-nowrap rounded-md bg-neutral-950 px-2 py-0.5 text-[10px] font-semibold text-white shadow-sm group-hover:block">
+                        {currency}{Number(b.amount).toLocaleString('en-US')} ({b.count})
+                      </div>
+                      <div
+                        className={`w-full max-w-[32px] rounded-t-lg transition-all duration-300 ${isZero ? 'h-1.5 bg-neutral-200' : 'bg-black group-hover:bg-neutral-700'}`}
+                        style={!isZero ? { height: `${Math.max(b.heightPercent, 10)}%` } : undefined}
+                        title={`${b.label} (${b.sub}): ${currency}${formatMoney(b.amount)} (${b.count} orders)`}
+                      />
+                    </div>
+                    <span className={`mt-2 text-[11px] ${isZero ? 'font-medium text-neutral-400' : 'font-semibold text-neutral-800'}`}>{b.label}</span>
+                    <span className="text-[9px] text-neutral-400">
+                      {b.sub !== 'Month' && b.sub !== 'Year' ? `${b.sub} · ` : ''}
+                      {isZero ? '$0' : `${currency}${Math.round(b.amount)}`}
+                    </span>
+                  </div>
+                )
+              })}
             </div>
           </div>
 
