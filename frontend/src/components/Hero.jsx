@@ -1,6 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import { assets } from '../assets/assets'
+import heroImg from '../assets/hero.png'
 
 const Hero = () => {
 
@@ -146,7 +146,7 @@ const Hero = () => {
                     {/* Main Image */}
 
                     <img
-                        src={assets.hero}
+                        src={heroImg}
                         alt="EASYBUY latest fashion collection"
                         className="absolute inset-0 h-full w-full object-cover object-center transition-transform duration-1000 ease-out group-hover:scale-[1.04]"
                     />

@@ -11,7 +11,6 @@ import {
     ShoppingBag
 } from 'lucide-react'
 
-import { assets } from '../assets/assets'
 import NewsletterBox from '../components/NewsLetterBox'
 
 const About = () => {

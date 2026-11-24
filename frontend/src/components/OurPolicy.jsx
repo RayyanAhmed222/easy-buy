@@ -1,26 +1,28 @@
 import React from 'react'
-import { assets } from '../assets/assets'
 import { ArrowRight, ShieldCheck, RotateCcw, Headphones } from 'lucide-react'
+import exchangeIcon from '../assets/exchange_icon.png'
+import qualityIcon from '../assets/quality_icon.png'
+import supportImg from '../assets/support_img.png'
 
 const OurPolicy = () => {
 
     const policies = [
         {
-            icon: assets.exchange_icon,
+            icon: exchangeIcon,
             fallbackIcon: RotateCcw,
             title: 'Easy Exchange',
             description: 'Hassle-free exchanges made simple.',
             detail: 'Flexible exchange policy'
         },
         {
-            icon: assets.quality_icon,
+            icon: qualityIcon,
             fallbackIcon: ShieldCheck,
             title: '7 Days Returns',
             description: 'Shop confidently with easy returns.',
             detail: 'Simple return process'
         },
         {
-            icon: assets.support_img,
+            icon: supportImg,
             fallbackIcon: Headphones,
             title: '24/7 Support',
             description: 'We are always here when you need us.',

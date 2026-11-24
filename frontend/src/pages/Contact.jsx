@@ -10,7 +10,6 @@ import {
     Headphones,
 } from 'lucide-react'
 import { FaInstagram } from 'react-icons/fa'
-import { assets } from '../assets/assets'
 import NewsLetterBox from '../components/NewsLetterBox'
 
 const Contact = () => {
