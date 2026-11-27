@@ -1,26 +1,34 @@
-import jwt from 'jsonwebtoken'
+import jwt from "jsonwebtoken";
+import userModel from "../models/userModel.js";
 
-const adminAuth = async (req,res,next) => {
-
+const adminAuth = async (req, res, next) => {
     try {
-        
-        const { token } = req.headers
+        const token = req.headers.token || req.headers.authorization?.replace("Bearer ", "");
         if (!token) {
-            return res.json({success: false, message: "Not Authorized Login Again"})
+            return res.status(401).json({ success: false, message: "Not Authorized. Login Again" });
         }
 
-        const token_decode = jwt.verify(token,process.env.JWT_SECRET);
-        if (token_decode !== process.env.ADMIN_EMAIL + process.env.ADMIN_PASSWORD) {
-            return res.json({success: false, message: "Not Authorized Login Again"})
-            
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        if (decoded.purpose === "mfa_challenge") {
+            return res.status(401).json({ success: false, message: "Complete MFA verification first" });
         }
-        next()
 
+        const user = await userModel.findById(decoded.id).select("role mfaEnabled");
+        if (!user) {
+            return res.status(401).json({ success: false, message: "User not found" });
+        }
+
+        if (user.role !== "admin") {
+            return res.status(403).json({ success: false, message: "Forbidden: Admin access required" });
+        }
+
+        req.userId = user._id;
+        req.userRole = user.role;
+        next();
     } catch (error) {
         console.log(error);
-        res.json({ success: false, messsage: error.messsage })
+        return res.status(401).json({ success: false, message: "Invalid or expired token" });
     }
+};
 
-}
-
-export default adminAuth
+export default adminAuth;

@@ -1,6 +1,7 @@
 import React, { Suspense, lazy, useEffect } from 'react'
 import { Routes, Route, useLocation } from 'react-router-dom'
 import { ToastContainer } from 'react-toastify'
+import { GoogleOAuthProvider } from '@react-oauth/google'
 import 'react-toastify/dist/ReactToastify.css'
 
 import Home from './pages/Home'
@@ -49,35 +50,39 @@ const ScrollToTop = () => {
   return null
 }
 
+const googleClientId = import.meta.env.VITE_GOOGLE_CLIENT_ID
+
 const App = () => {
   return (
-    <div className='px-4 sm:px-[5vw] md:px-[7vw] lg:px-[9vw]'>
-      <ScrollToTop />
-      <ToastContainer />
-      <Navbar />
-      <SearchBar />
+    <GoogleOAuthProvider clientId={googleClientId}>
+      <div className='px-4 sm:px-[5vw] md:px-[7vw] lg:px-[9vw]'>
+        <ScrollToTop />
+        <ToastContainer />
+        <Navbar />
+        <SearchBar />
 
-      <Suspense fallback={<div className='py-16 text-center text-sm text-gray-400'>Loading...</div>}>
-        <Routes>
-          <Route path='/' element={<Home />} />
+        <Suspense fallback={<div className='py-16 text-center text-sm text-gray-400'>Loading...</div>}>
+          <Routes>
+            <Route path='/' element={<Home />} />
 
-          {catalogRoutes.map((path) => (
-            <Route key={path} path={path} element={getCatalogElement(path)} />
-          ))}
+            {catalogRoutes.map((path) => (
+              <Route key={path} path={path} element={getCatalogElement(path)} />
+            ))}
 
-          <Route path='/about' element={<About />} />
-          <Route path='/contact' element={<Contact />} />
-          <Route path='/product/:productId' element={<Product />} />
-          <Route path='/cart' element={<Cart />} />
-          <Route path='/login' element={<Login />} />
-          <Route path='/place-order' element={<PlaceOrder />} />
-          <Route path='/profile' element={<Profile />} />
-          <Route path='/orders' element={<Orders />} />
-        </Routes>
-      </Suspense>
+            <Route path='/about' element={<About />} />
+            <Route path='/contact' element={<Contact />} />
+            <Route path='/product/:productId' element={<Product />} />
+            <Route path='/cart' element={<Cart />} />
+            <Route path='/login' element={<Login />} />
+            <Route path='/place-order' element={<PlaceOrder />} />
+            <Route path='/profile' element={<Profile />} />
+            <Route path='/orders' element={<Orders />} />
+          </Routes>
+        </Suspense>
 
-      <Footer />
-    </div>
+        <Footer />
+      </div>
+    </GoogleOAuthProvider>
   )
 }
 

@@ -1,11 +1,16 @@
 import React, { useContext, useEffect, useState } from 'react'
 import axios from 'axios'
 import { toast } from 'react-toastify'
-import { ArrowRight, LockKeyhole, Mail, User, ShieldCheck, Eye, EyeOff, Sparkles } from 'lucide-react'
+import { GoogleLogin } from '@react-oauth/google'
+import { ArrowRight, LockKeyhole, Mail, User, ShieldCheck, Eye, EyeOff, Sparkles, KeyRound } from 'lucide-react'
 import { ShopContext } from '../context/ShopContext'
 
 const Login = () => {
     const [currentState, setCurrentState] = useState('Login')
+    const [pinStep, setPinStep] = useState(false)
+    const [pendingEmail, setPendingEmail] = useState('')
+    const [pinCode, setPinCode] = useState('')
+
     const { token, setToken, navigate, backendUrl } = useContext(ShopContext)
 
     const [name, setName] = useState('')
@@ -14,11 +19,31 @@ const Login = () => {
     const [showPassword, setShowPassword] = useState(false)
     const [loading, setLoading] = useState(false)
 
+    const completeLoginWithToken = (jwtToken, successMsg) => {
+        setToken(jwtToken)
+        localStorage.setItem('token', jwtToken)
+        toast.success(successMsg || 'Welcome to EASYBUY!')
+    }
+
     const onSubmitHandler = async (event) => {
         event.preventDefault()
 
         try {
             setLoading(true)
+
+            if (pinStep) {
+                const response = await axios.post(
+                    backendUrl + '/api/user/verify-signup-pin',
+                    { email: pendingEmail, pin: pinCode }
+                )
+
+                if (response.data.success && response.data.token) {
+                    completeLoginWithToken(response.data.token, response.data.message)
+                } else {
+                    toast.error(response.data.message || 'PIN verification failed')
+                }
+                return
+            }
 
             if (currentState === 'Sign Up') {
                 const response = await axios.post(
@@ -26,12 +51,13 @@ const Login = () => {
                     { name, email, password }
                 )
 
-                if (response.data.success) {
-                    toast.success('Account created! Please log in to continue.')
-                    setCurrentState('Login')
-                    setName('')
-                    setPassword('')
-                    setShowPassword(false)
+                if (response.data.success && response.data.requiresPin) {
+                    setPendingEmail(response.data.email || email.trim().toLowerCase())
+                    setPinCode('')
+                    setPinStep(true)
+                    toast.success(response.data.message || 'Verification PIN sent to your Gmail.')
+                } else if (response.data.success && response.data.token) {
+                    completeLoginWithToken(response.data.token, response.data.message)
                 } else {
                     toast.error(response.data.message)
                 }
@@ -42,12 +68,41 @@ const Login = () => {
                 )
 
                 if (response.data.success) {
-                    setToken(response.data.token)
-                    localStorage.setItem('token', response.data.token)
-                    toast.success(response.data.message || 'Welcome back to EASYBUY!')
+                    completeLoginWithToken(response.data.token, response.data.message || 'Welcome back to EASYBUY!')
                 } else {
                     toast.error(response.data.message)
                 }
+            }
+        } catch (error) {
+            console.log(error)
+            toast.error(error.response?.data?.message || error.message)
+        } finally {
+            setLoading(false)
+        }
+    }
+
+    const handleGoogleSuccess = async (credentialResponse) => {
+        if (!credentialResponse?.credential) {
+            toast.error('Google sign-in token was not received.')
+            return
+        }
+
+        try {
+            setLoading(true)
+            const response = await axios.post(
+                backendUrl + '/api/user/google-login',
+                { credential: credentialResponse.credential }
+            )
+
+            if (response.data.success && response.data.requiresPin) {
+                setPendingEmail(response.data.email)
+                setPinCode('')
+                setPinStep(true)
+                toast.success(response.data.message || 'Verification PIN sent to your Gmail.')
+            } else if (response.data.success && response.data.token) {
+                completeLoginWithToken(response.data.token, response.data.message || 'Signed in with Google!')
+            } else {
+                toast.error(response.data.message)
             }
         } catch (error) {
             console.log(error)
@@ -65,6 +120,9 @@ const Login = () => {
 
     const switchState = () => {
         setCurrentState(currentState === 'Login' ? 'Sign Up' : 'Login')
+        setPinStep(false)
+        setPendingEmail('')
+        setPinCode('')
         setName('')
         setEmail('')
         setPassword('')
@@ -132,91 +190,131 @@ const Login = () => {
                             <div className="flex items-center gap-2 mb-4">
                                 <span className="w-7 h-px bg-black"></span>
                                 <p className="text-[10px] font-semibold tracking-[0.25em] uppercase text-gray-400">
-                                    {currentState === 'Login' ? 'WELCOME BACK' : 'JOIN EASYBUY'}
+                                    {pinStep ? 'GMAIL VERIFICATION' : currentState === 'Login' ? 'WELCOME BACK' : 'JOIN EASYBUY'}
                                 </p>
                             </div>
 
                             <h2 className="text-3xl sm:text-4xl font-light tracking-tight text-gray-900">
-                                {currentState === 'Login' ? 'Welcome back.' : 'Create your account.'}
+                                {pinStep
+                                    ? 'Enter 6-digit PIN.'
+                                    : currentState === 'Login'
+                                        ? 'Welcome back.'
+                                        : 'Create your account.'}
                             </h2>
 
                             <p className="text-sm text-gray-500 mt-3 leading-6">
-                                {currentState === 'Login'
-                                    ? 'Sign in to continue your EASYBUY journey.'
-                                    : 'Create an account and then sign in to start shopping with EASYBUY.'}
+                                {pinStep
+                                    ? `We sent a verification PIN to ${pendingEmail}. Enter it below to complete sign-up.`
+                                    : currentState === 'Login'
+                                        ? 'Sign in to continue your EASYBUY journey.'
+                                        : 'Verify your Gmail with a 6-digit PIN to create your EASYBUY account.'}
                             </p>
                         </div>
 
-                        {currentState === 'Sign Up' && (
+                        {pinStep ? (
                             <div className="mb-4">
-                                <label className="block text-xs font-medium text-gray-600 mb-2">Full Name</label>
+                                <label className="block text-xs font-medium text-gray-600 mb-2">6-Digit Gmail PIN</label>
                                 <div className="relative">
-                                    <User size={17} strokeWidth={1.7} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
+                                    <KeyRound size={17} strokeWidth={1.7} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
                                     <input
-                                        onChange={(e) => setName(e.target.value)}
-                                        value={name}
+                                        onChange={(e) => setPinCode(e.target.value.replace(/\D/g, '').slice(0, 6))}
+                                        value={pinCode}
                                         type="text"
-                                        placeholder="Enter your name"
-                                        className="w-full h-13 pl-11 pr-4 py-3 border border-gray-200 rounded-xl outline-none text-sm text-gray-800 placeholder:text-gray-400 focus:border-black transition-colors"
+                                        inputMode="numeric"
+                                        placeholder="123456"
+                                        maxLength={6}
+                                        className="w-full h-13 pl-11 pr-4 py-3 border border-gray-200 rounded-xl outline-none text-sm tracking-[0.3em] text-gray-800 placeholder:text-gray-400 placeholder:tracking-normal focus:border-black transition-colors"
                                         required
                                     />
                                 </div>
+
+                                <div className="flex items-center justify-between mt-4">
+                                    <button
+                                        type="button"
+                                        onClick={() => {
+                                            setPinStep(false)
+                                            setPinCode('')
+                                        }}
+                                        className="text-xs font-medium text-gray-600 underline hover:text-black"
+                                    >
+                                        Change details / go back
+                                    </button>
+                                </div>
                             </div>
+                        ) : (
+                            <>
+                                {currentState === 'Sign Up' && (
+                                    <div className="mb-4">
+                                        <label className="block text-xs font-medium text-gray-600 mb-2">Full Name</label>
+                                        <div className="relative">
+                                            <User size={17} strokeWidth={1.7} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
+                                            <input
+                                                onChange={(e) => setName(e.target.value)}
+                                                value={name}
+                                                type="text"
+                                                placeholder="Enter your name"
+                                                className="w-full h-13 pl-11 pr-4 py-3 border border-gray-200 rounded-xl outline-none text-sm text-gray-800 placeholder:text-gray-400 focus:border-black transition-colors"
+                                                required
+                                            />
+                                        </div>
+                                    </div>
+                                )}
+
+                                <div className="mb-4">
+                                    <label className="block text-xs font-medium text-gray-600 mb-2">Email Address</label>
+                                    <div className="relative">
+                                        <Mail size={17} strokeWidth={1.7} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
+                                        <input
+                                            onChange={(e) => setEmail(e.target.value)}
+                                            value={email}
+                                            type="email"
+                                            placeholder="you@example.com"
+                                            className="w-full h-13 pl-11 pr-4 py-3 border border-gray-200 rounded-xl outline-none text-sm text-gray-800 placeholder:text-gray-400 focus:border-black transition-colors"
+                                            required
+                                        />
+                                    </div>
+                                </div>
+
+                                <div className="mb-4">
+                                    <div className="flex items-center justify-between mb-2">
+                                        <label className="text-xs font-medium text-gray-600">Password</label>
+                                    </div>
+
+                                    <div className="relative">
+                                        <LockKeyhole size={17} strokeWidth={1.7} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
+                                        <input
+                                            onChange={(e) => setPassword(e.target.value)}
+                                            value={password}
+                                            type={showPassword ? 'text' : 'password'}
+                                            placeholder="Enter your password"
+                                            className="w-full h-13 pl-11 pr-12 py-3 border border-gray-200 rounded-xl outline-none text-sm text-gray-800 placeholder:text-gray-400 focus:border-black transition-colors"
+                                            required
+                                        />
+                                        <button
+                                            type="button"
+                                            onClick={() => setShowPassword(!showPassword)}
+                                            className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-black transition-colors"
+                                        >
+                                            {showPassword ? <EyeOff size={17} /> : <Eye size={17} />}
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div className="flex items-center justify-between gap-4 mt-6">
+                                    <p className="text-sm text-gray-500">
+                                        {currentState === 'Login' ? "Don't have an account?" : 'Already have an account?'}
+                                    </p>
+
+                                    <button
+                                        type="button"
+                                        onClick={switchState}
+                                        className="text-sm font-medium text-gray-900 border-b border-gray-900 pb-0.5 hover:opacity-60 transition-opacity"
+                                    >
+                                        {currentState === 'Login' ? 'Create account' : 'Login here'}
+                                    </button>
+                                </div>
+                            </>
                         )}
-
-                        <div className="mb-4">
-                            <label className="block text-xs font-medium text-gray-600 mb-2">Email Address</label>
-                            <div className="relative">
-                                <Mail size={17} strokeWidth={1.7} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
-                                <input
-                                    onChange={(e) => setEmail(e.target.value)}
-                                    value={email}
-                                    type="email"
-                                    placeholder="you@example.com"
-                                    className="w-full h-13 pl-11 pr-4 py-3 border border-gray-200 rounded-xl outline-none text-sm text-gray-800 placeholder:text-gray-400 focus:border-black transition-colors"
-                                    required
-                                />
-                            </div>
-                        </div>
-
-                        <div className="mb-4">
-                            <div className="flex items-center justify-between mb-2">
-                                <label className="text-xs font-medium text-gray-600">Password</label>
-                            </div>
-
-                            <div className="relative">
-                                <LockKeyhole size={17} strokeWidth={1.7} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
-                                <input
-                                    onChange={(e) => setPassword(e.target.value)}
-                                    value={password}
-                                    type={showPassword ? 'text' : 'password'}
-                                    placeholder="Enter your password"
-                                    className="w-full h-13 pl-11 pr-12 py-3 border border-gray-200 rounded-xl outline-none text-sm text-gray-800 placeholder:text-gray-400 focus:border-black transition-colors"
-                                    required
-                                />
-                                <button
-                                    type="button"
-                                    onClick={() => setShowPassword(!showPassword)}
-                                    className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-black transition-colors"
-                                >
-                                    {showPassword ? <EyeOff size={17} /> : <Eye size={17} />}
-                                </button>
-                            </div>
-                        </div>
-
-                        <div className="flex items-center justify-between gap-4 mt-6">
-                            <p className="text-sm text-gray-500">
-                                {currentState === 'Login' ? "Don't have an account?" : 'Already have an account?'}
-                            </p>
-
-                            <button
-                                type="button"
-                                onClick={switchState}
-                                className="text-sm font-medium text-gray-900 border-b border-gray-900 pb-0.5 hover:opacity-60 transition-opacity"
-                            >
-                                {currentState === 'Login' ? 'Create account' : 'Login here'}
-                            </button>
-                        </div>
 
                         <button
                             type="submit"
@@ -226,15 +324,35 @@ const Login = () => {
                             {loading ? (
                                 <>
                                     <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></span>
-                                    {currentState === 'Login' ? 'Signing in...' : 'Creating account...'}
+                                    {pinStep ? 'Verifying PIN...' : currentState === 'Login' ? 'Signing in...' : 'Sending PIN...'}
                                 </>
                             ) : (
                                 <>
-                                    {currentState === 'Login' ? 'Sign In' : 'Create Account'}
+                                    {pinStep ? 'Verify PIN & Sign Up' : currentState === 'Login' ? 'Sign In' : 'Send Gmail PIN'}
                                     <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
                                 </>
                             )}
                         </button>
+
+                        {!pinStep && (
+                            <>
+                                <div className="flex items-center gap-3 my-5">
+                                    <span className="h-px flex-1 bg-gray-200"></span>
+                                    <span className="text-[11px] uppercase tracking-wider text-gray-400">or</span>
+                                    <span className="h-px flex-1 bg-gray-200"></span>
+                                </div>
+
+                                <div className="flex justify-center">
+                                    <GoogleLogin
+                                        onSuccess={handleGoogleSuccess}
+                                        onError={() => toast.error('Google Sign-In failed or was cancelled.')}
+                                        width="360"
+                                        shape="pill"
+                                        text={currentState === 'Login' ? 'signin_with' : 'signup_with'}
+                                    />
+                                </div>
+                            </>
+                        )}
 
                         <div className="flex items-center justify-center gap-2 mt-6 text-[11px] text-gray-400">
                             <ShieldCheck size={14} strokeWidth={1.7} />
