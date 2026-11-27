@@ -130,9 +130,9 @@ const Login = () => {
     }
 
     return (
-        <div className="min-h-[calc(100vh-80px)] bg-[#f6f6f3] flex items-center justify-center px-4 py-12 sm:py-16">
-            <div className="w-full max-w-6xl grid lg:grid-cols-2 bg-white rounded-4xl overflow-hidden shadow-[0_20px_70px_rgba(0,0,0,0.08)]">
-                <div className="hidden lg:flex relative bg-black text-white p-12 xl:p-16 flex-col justify-between min-h-162.5 overflow-hidden">
+        <div className="min-h-[calc(100vh-80px)] bg-[#f6f6f3] flex items-center justify-center px-3 sm:px-4 py-8 sm:py-16 overflow-x-hidden">
+            <div className="w-full max-w-6xl grid grid-cols-1 lg:grid-cols-2 bg-white rounded-2xl sm:rounded-3xl lg:rounded-[32px] overflow-hidden shadow-[0_20px_70px_rgba(0,0,0,0.08)]">
+                <div className="hidden lg:flex relative bg-black text-white p-12 xl:p-16 flex-col justify-between min-h-[650px] overflow-hidden">
                     <div className="absolute -right-20 -bottom-20 text-[240px] font-serif italic text-white/[0.035] select-none">
                         EB
                     </div>
@@ -179,22 +179,22 @@ const Login = () => {
                     </div>
                 </div>
 
-                <div className="px-6 sm:px-10 lg:px-12 xl:px-16 py-10 sm:py-14 flex items-center">
+                <div className="w-full px-5 sm:px-10 lg:px-12 xl:px-16 py-8 sm:py-14 flex items-center">
                     <form onSubmit={onSubmitHandler} className="w-full max-w-md mx-auto">
-                        <div className="lg:hidden text-center mb-8">
+                        <div className="lg:hidden text-center mb-6 sm:mb-8">
                             <p className="text-xl font-semibold tracking-[0.15em]">EASYBUY</p>
                             <p className="text-xs text-gray-400 mt-1">Fashion made simple.</p>
                         </div>
 
-                        <div className="mb-8">
-                            <div className="flex items-center gap-2 mb-4">
+                        <div className="mb-6 sm:mb-8">
+                            <div className="flex items-center gap-2 mb-3 sm:mb-4">
                                 <span className="w-7 h-px bg-black"></span>
                                 <p className="text-[10px] font-semibold tracking-[0.25em] uppercase text-gray-400">
                                     {pinStep ? 'GMAIL VERIFICATION' : currentState === 'Login' ? 'WELCOME BACK' : 'JOIN EASYBUY'}
                                 </p>
                             </div>
 
-                            <h2 className="text-3xl sm:text-4xl font-light tracking-tight text-gray-900">
+                            <h2 className="text-2xl sm:text-4xl font-light tracking-tight text-gray-900">
                                 {pinStep
                                     ? 'Enter 6-digit PIN.'
                                     : currentState === 'Login'
@@ -202,7 +202,7 @@ const Login = () => {
                                         : 'Create your account.'}
                             </h2>
 
-                            <p className="text-sm text-gray-500 mt-3 leading-6">
+                            <p className="text-sm text-gray-500 mt-2.5 sm:mt-3 leading-6">
                                 {pinStep
                                     ? `We sent a verification PIN to ${pendingEmail}. Enter it below to complete sign-up.`
                                     : currentState === 'Login'
@@ -223,7 +223,7 @@ const Login = () => {
                                         inputMode="numeric"
                                         placeholder="123456"
                                         maxLength={6}
-                                        className="w-full h-13 pl-11 pr-4 py-3 border border-gray-200 rounded-xl outline-none text-sm tracking-[0.3em] text-gray-800 placeholder:text-gray-400 placeholder:tracking-normal focus:border-black transition-colors"
+                                        className="w-full h-12 sm:h-13 pl-11 pr-4 py-3 border border-gray-200 rounded-xl outline-none text-sm tracking-[0.25em] sm:tracking-[0.3em] text-gray-800 placeholder:text-gray-400 placeholder:tracking-normal focus:border-black transition-colors"
                                         required
                                     />
                                 </div>
@@ -253,7 +253,7 @@ const Login = () => {
                                                 value={name}
                                                 type="text"
                                                 placeholder="Enter your name"
-                                                className="w-full h-13 pl-11 pr-4 py-3 border border-gray-200 rounded-xl outline-none text-sm text-gray-800 placeholder:text-gray-400 focus:border-black transition-colors"
+                                                className="w-full h-12 sm:h-13 pl-11 pr-4 py-3 border border-gray-200 rounded-xl outline-none text-sm text-gray-800 placeholder:text-gray-400 focus:border-black transition-colors"
                                                 required
                                             />
                                         </div>
@@ -269,7 +269,7 @@ const Login = () => {
                                             value={email}
                                             type="email"
                                             placeholder="you@example.com"
-                                            className="w-full h-13 pl-11 pr-4 py-3 border border-gray-200 rounded-xl outline-none text-sm text-gray-800 placeholder:text-gray-400 focus:border-black transition-colors"
+                                            className="w-full h-12 sm:h-13 pl-11 pr-4 py-3 border border-gray-200 rounded-xl outline-none text-sm text-gray-800 placeholder:text-gray-400 focus:border-black transition-colors"
                                             required
                                         />
                                     </div>
@@ -287,7 +287,7 @@ const Login = () => {
                                             value={password}
                                             type={showPassword ? 'text' : 'password'}
                                             placeholder="Enter your password"
-                                            className="w-full h-13 pl-11 pr-12 py-3 border border-gray-200 rounded-xl outline-none text-sm text-gray-800 placeholder:text-gray-400 focus:border-black transition-colors"
+                                            className="w-full h-12 sm:h-13 pl-11 pr-12 py-3 border border-gray-200 rounded-xl outline-none text-sm text-gray-800 placeholder:text-gray-400 focus:border-black transition-colors"
                                             required
                                         />
                                         <button
@@ -300,7 +300,7 @@ const Login = () => {
                                     </div>
                                 </div>
 
-                                <div className="flex items-center justify-between gap-4 mt-6">
+                                <div className="flex flex-wrap items-center justify-between gap-2 sm:gap-4 mt-6">
                                     <p className="text-sm text-gray-500">
                                         {currentState === 'Login' ? "Don't have an account?" : 'Already have an account?'}
                                     </p>
@@ -319,7 +319,7 @@ const Login = () => {
                         <button
                             type="submit"
                             disabled={loading}
-                            className="group w-full mt-7 h-13 bg-black text-white rounded-xl flex items-center justify-center gap-2 text-sm font-medium hover:bg-gray-800 transition-all disabled:opacity-60 disabled:cursor-not-allowed"
+                            className="group w-full mt-6 sm:mt-7 h-12 sm:h-13 bg-black text-white rounded-xl flex items-center justify-center gap-2 text-sm font-medium hover:bg-gray-800 transition-all disabled:opacity-60 disabled:cursor-not-allowed"
                         >
                             {loading ? (
                                 <>
@@ -342,11 +342,10 @@ const Login = () => {
                                     <span className="h-px flex-1 bg-gray-200"></span>
                                 </div>
 
-                                <div className="flex justify-center">
+                                <div className="w-full flex justify-center overflow-hidden">
                                     <GoogleLogin
                                         onSuccess={handleGoogleSuccess}
                                         onError={() => toast.error('Google Sign-In failed or was cancelled.')}
-                                        width="360"
                                         shape="pill"
                                         text={currentState === 'Login' ? 'signin_with' : 'signup_with'}
                                     />
@@ -354,8 +353,8 @@ const Login = () => {
                             </>
                         )}
 
-                        <div className="flex items-center justify-center gap-2 mt-6 text-[11px] text-gray-400">
-                            <ShieldCheck size={14} strokeWidth={1.7} />
+                        <div className="flex items-center justify-center gap-2 mt-6 text-[11px] text-gray-400 text-center">
+                            <ShieldCheck size={14} strokeWidth={1.7} className="shrink-0" />
                             <span>Your account information is kept secure.</span>
                         </div>
                     </form>

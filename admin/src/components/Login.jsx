@@ -130,7 +130,7 @@ const Login = ({ setToken }) => {
             {/* CONTENT */}
             <div className="relative z-10 flex min-h-[calc(100vh-4rem)] items-center justify-center">
 
-                <div className="w-full max-w-[430px]">
+                <div className="w-full max-w-107.5">
 
                     {/* BRAND */}
                     <div className="mb-8 text-center">
